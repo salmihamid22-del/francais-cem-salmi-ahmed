@@ -1,0 +1,2076 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le Français au CEM — Prof. SALMI AHMED</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        .bg-green-gradient-hero {
+            background: linear-gradient(135deg, #0D3B1E 0%, #1B5E20 50%, #2E7D32 100%);
+        }
+        .bg-green-gradient-nav {
+            background: linear-gradient(90deg, #0D3B1E 0%, #1B5E20 100%);
+        }
+        .bg-green-gradient-btn {
+            background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 100%);
+        }
+        .bg-green-gradient-btn:hover {
+            background: linear-gradient(135deg, #0D3B1E 0%, #1B5E20 100%);
+        }
+        .card-1am { background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 100%); }
+        .card-2am { background: linear-gradient(135deg, #0F4C3A 0%, #166534 100%); }
+        .card-3am { background: linear-gradient(135deg, #14532D 0%, #15803D 100%); }
+        .card-4am { background: linear-gradient(135deg, #064E3B 0%, #047857 100%); }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="h-full bg-[#F4FAF5] text-gray-900 font-sans flex flex-col justify-between antialiased selection:bg-emerald-200 selection:text-emerald-950">
+
+    <!-- ==================== HEADER & NAVIGATION ==================== -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-emerald-100 shadow-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+            
+            <!-- Logo & Identité -->
+            <div onclick="navigateTo('accueil')" class="flex items-center gap-3 cursor-pointer group">
+                <div class="w-12 h-12 rounded-2xl bg-green-gradient-hero flex items-center justify-center text-white shadow-md group-hover:scale-105 transition">
+                    <i data-lucide="graduation-cap" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-base sm:text-lg text-[#0D3B1E] tracking-tight leading-tight flex items-center gap-2">
+                        <span>Le Français au CEM</span>
+                        <span class="px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 text-[10px] font-extrabold tracking-normal">BEM & Cours</span>
+                    </h1>
+                    <p class="text-xs text-gray-500 font-medium mt-0.5">Prof. SALMI AHMED — Collège (1AM à 4AM)</p>
+                </div>
+            </div>
+
+            <!-- Barre de Recherche Globale (Desktop) -->
+            <div class="hidden md:flex items-center flex-grow max-w-md mx-6">
+                <div class="relative w-full">
+                    <i data-lucide="search" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i>
+                    <input type="text" id="global-search-input" oninput="handleGlobalSearch(this.value)" placeholder="Rechercher un cours, une fiche, un devoir, le BEM..." 
+                        class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-emerald-50/50 border border-emerald-200/80 focus:border-[#2E7D32] focus:bg-white focus:outline-none text-xs sm:text-sm transition">
+                </div>
+            </div>
+
+            <!-- Boutons Rôle & Navigation Droite -->
+            <div class="flex items-center gap-2.5">
+                <!-- Admin connectés -->
+                <div id="admin-controls-header" class="hidden items-center gap-2">
+                    <span class="hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-100 text-amber-950 text-xs font-extrabold border border-amber-300">
+                        <i data-lucide="shield-check" class="w-3.5 h-3.5 text-amber-700"></i>
+                        <span>Admin : Prof. Salmi</span>
+                    </span>
+                    <button onclick="openTeacherModal()" class="bg-green-gradient-btn text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow-sm hover:shadow flex items-center gap-1.5 transition cursor-pointer">
+                        <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                        <span>Héberger un doc</span>
+                    </button>
+                    <button onclick="logoutAdmin()" class="p-2 rounded-xl bg-gray-100 hover:bg-red-50 text-gray-600 hover:text-red-700 transition cursor-pointer" title="Se déconnecter">
+                        <i data-lucide="log-out" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <!-- Bouton Connexion Admin (Toujours visible en jaune si non connecté) -->
+                <button id="mobile-login-btn" onclick="openLoginModal()" class="bg-amber-400 hover:bg-amber-300 text-emerald-950 px-3.5 py-2 rounded-xl text-xs font-extrabold shadow-sm flex items-center gap-1.5 transition cursor-pointer">
+                    <i data-lucide="lock" class="w-3.5 h-3.5"></i>
+                    <span>Connexion Admin</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== CONTENU PRINCIPAL ==================== -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
+        
+        <!-- Toast Notification Flottante -->
+        <div id="toast-notification" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+            <div class="bg-emerald-950 text-white px-4 py-3 rounded-2xl shadow-xl flex items-center gap-3 border border-emerald-800">
+                <i data-lucide="check-circle" class="w-5 h-5 text-emerald-400 shrink-0"></i>
+                <p id="toast-message" class="text-xs sm:text-sm font-medium">Notification système</p>
+            </div>
+        </div>
+
+        <!-- ==================== VUE 1 : ACCUEIL ==================== -->
+        <section id="view-accueil" class="space-y-8 fade-in">
+            <!-- Bannière Héroïque -->
+            <div class="bg-green-gradient-hero rounded-3xl p-6 sm:p-10 text-white shadow-xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
+                <div class="absolute -right-10 -bottom-10 w-64 h-64 rounded-full bg-white/5 pointer-events-none"></div>
+                <div class="absolute right-32 top-5 w-32 h-32 rounded-full bg-white/5 pointer-events-none"></div>
+                
+                <div class="space-y-4 max-w-2xl relative z-10">
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/10 backdrop-blur-md text-emerald-200 text-xs font-bold border border-white/15">
+                        <i data-lucide="book-open" class="w-3.5 h-3.5"></i>
+                        <span>Portail Pédagogique Officiel — Français CEM</span>
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight">
+                        Enseignement du Français au Cycle Moyen
+                    </h2>
+                    <p class="text-sm sm:text-base text-emerald-100/90 leading-relaxed font-light">
+                        Bienvenue sur l'espace éducatif de <strong>Prof. SALMI AHMED</strong>. Retrouvez facilement toutes vos fiches pédagogiques, cours de langue, résumés, boîtes à outils pour la production écrite, ainsi que les sujets de devoirs, compositions et annales du BEM.
+                    </p>
+                    <div class="pt-2 flex flex-wrap items-center gap-3">
+                        <button onclick="navigateTo('4AM')" class="bg-amber-400 hover:bg-amber-300 text-emerald-950 px-5 py-2.5 rounded-xl font-extrabold text-xs sm:text-sm shadow-md transition flex items-center gap-2 cursor-pointer">
+                            <i data-lucide="award" class="w-4 h-4"></i>
+                            <span>Espace BEM (4AM)</span>
+                        </button>
+                        <button onclick="scrollToRecent()" class="bg-white/15 hover:bg-white/25 text-white px-5 py-2.5 rounded-xl font-semibold text-xs sm:text-sm backdrop-blur-md transition flex items-center gap-2 cursor-pointer border border-white/20">
+                            <i data-lucide="clock" class="w-4 h-4"></i>
+                            <span>Dernières publications</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Encart rapide Admin sur Accueil -->
+                <div class="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 text-white w-full md:w-80 shrink-0 space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2.5 rounded-xl bg-amber-400 text-emerald-950">
+                            <i data-lucide="user-check" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm">Prof. SALMI AHMED</h4>
+                            <p class="text-xs text-emerald-200">Enseignant de Français</p>
+                        </div>
+                    </div>
+                    <div class="text-xs text-emerald-100/90 space-y-1.5 pt-2 border-t border-white/15">
+                        <p class="flex items-center justify-between"><span>Niveaux gérés :</span><span class="font-bold">1AM au 4AM</span></p>
+                        <p class="flex items-center justify-between"><span>Documents en ligne :</span><span id="total-docs-badge" class="font-bold">0</span></p>
+                    </div>
+                    <div id="mobile-admin-btns" class="hidden pt-1">
+                        <button onclick="openTeacherModal()" class="w-full py-2.5 px-3 rounded-xl bg-amber-400 text-emerald-950 font-extrabold text-xs shadow hover:bg-amber-300 flex items-center justify-center gap-1.5 transition cursor-pointer">
+                            <i data-lucide="plus-circle" class="w-4 h-4"></i> Héberger un document
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grille des 4 Niveaux (1AM à 4AM) -->
+            <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xl font-bold text-[#0D3B1E] flex items-center gap-2">
+                        <i data-lucide="layers" class="w-5 h-5 text-[#2E7D32]"></i>
+                        <span>Sélectionnez un niveau d'enseignement</span>
+                    </h3>
+                    <span class="text-xs text-gray-500 font-medium">Cliquez sur une carte pour explorer ou gérer</span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                    <!-- Carte 1AM -->
+                    <div onclick="navigateTo('1AM')" class="card-1am rounded-2xl p-6 text-white shadow-md hover:shadow-xl transition-all cursor-pointer transform hover:-translate-y-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="px-3 py-1 rounded-lg bg-white/20 text-sm font-extrabold">1<sup>ère</sup> AM</span>
+                                <i data-lucide="arrow-up-right" class="w-5 h-5 text-white/80"></i>
+                            </div>
+                            <h4 class="text-lg font-bold mb-1">1<sup>ère</sup> Année Moyenne</h4>
+                            <p class="text-xs text-emerald-50/90 leading-relaxed">
+                                Le texte explicatif et le texte prescriptif. Bases de la grammaire et conjugaison.
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-white/20 space-y-2.5">
+                            <div class="flex items-center justify-between text-xs font-semibold">
+                                <span id="count-1AM">0 documents</span>
+                                <span>Explorer →</span>
+                            </div>
+                            <button onclick="event.stopPropagation(); openLevelAdminHub('1AM')" class="admin-only-card-btn hidden w-full py-2 px-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-emerald-950 font-extrabold text-xs shadow-sm flex items-center justify-center gap-1.5 transition cursor-pointer">
+                                <i data-lucide="folder-cog" class="w-3.5 h-3.5"></i>
+                                <span>Gérer / Héberger (Admin)</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Carte 2AM -->
+                    <div onclick="navigateTo('2AM')" class="card-2am rounded-2xl p-6 text-white shadow-md hover:shadow-xl transition-all cursor-pointer transform hover:-translate-y-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="px-3 py-1 rounded-lg bg-white/20 text-sm font-extrabold">2<sup>ème</sup> AM</span>
+                                <i data-lucide="arrow-up-right" class="w-5 h-5 text-white/80"></i>
+                            </div>
+                            <h4 class="text-lg font-bold mb-1">2<sup>ème</sup> Année Moyenne</h4>
+                            <p class="text-xs text-emerald-50/90 leading-relaxed">
+                                Le conte, la fable et la légende. Maîtrise du récit et des temps du passé.
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-white/20 space-y-2.5">
+                            <div class="flex items-center justify-between text-xs font-semibold">
+                                <span id="count-2AM">0 documents</span>
+                                <span>Explorer →</span>
+                            </div>
+                            <button onclick="event.stopPropagation(); openLevelAdminHub('2AM')" class="admin-only-card-btn hidden w-full py-2 px-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-emerald-950 font-extrabold text-xs shadow-sm flex items-center justify-center gap-1.5 transition cursor-pointer">
+                                <i data-lucide="folder-cog" class="w-3.5 h-3.5"></i>
+                                <span>Gérer / Héberger (Admin)</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Carte 3AM -->
+                    <div onclick="navigateTo('3AM')" class="card-3am rounded-2xl p-6 text-white shadow-md hover:shadow-xl transition-all cursor-pointer transform hover:-translate-y-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="px-3 py-1 rounded-lg bg-white/20 text-sm font-extrabold">3<sup>ème</sup> AM</span>
+                                <i data-lucide="arrow-up-right" class="w-5 h-5 text-white/80"></i>
+                            </div>
+                            <h4 class="text-lg font-bold mb-1">3<sup>ème</sup> Année Moyenne</h4>
+                            <p class="text-xs text-emerald-50/90 leading-relaxed">
+                                La brève, le fait divers, le récit historique et la biographie.
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-white/20 space-y-2.5">
+                            <div class="flex items-center justify-between text-xs font-semibold">
+                                <span id="count-3AM">0 documents</span>
+                                <span>Explorer →</span>
+                            </div>
+                            <button onclick="event.stopPropagation(); openLevelAdminHub('3AM')" class="admin-only-card-btn hidden w-full py-2 px-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-emerald-950 font-extrabold text-xs shadow-sm flex items-center justify-center gap-1.5 transition cursor-pointer">
+                                <i data-lucide="folder-cog" class="w-3.5 h-3.5"></i>
+                                <span>Gérer / Héberger (Admin)</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Carte 4AM -->
+                    <div onclick="navigateTo('4AM')" class="card-4am rounded-2xl p-6 text-white shadow-md hover:shadow-xl transition-all cursor-pointer transform hover:-translate-y-1 flex flex-col justify-between ring-2 ring-amber-400/50">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="px-3 py-1 rounded-lg bg-amber-400 text-emerald-950 text-sm font-extrabold">4<sup>ème</sup> AM • BEM</span>
+                                <i data-lucide="award" class="w-5 h-5 text-amber-300"></i>
+                            </div>
+                            <h4 class="text-lg font-bold mb-1">4<sup>ème</sup> Année Moyenne</h4>
+                            <p class="text-xs text-emerald-50/90 leading-relaxed">
+                                Le texte argumentatif, annales du BEM corrigées et fiches de révision finale.
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-white/20 space-y-2.5">
+                            <div class="flex items-center justify-between text-xs font-semibold">
+                                <span id="count-4AM">0 documents</span>
+                                <span>Explorer →</span>
+                            </div>
+                            <button onclick="event.stopPropagation(); openLevelAdminHub('4AM')" class="admin-only-card-btn hidden w-full py-2 px-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-emerald-950 font-extrabold text-xs shadow-sm flex items-center justify-center gap-1.5 transition cursor-pointer">
+                                <i data-lucide="folder-cog" class="w-3.5 h-3.5"></i>
+                                <span>Gérer / Héberger (Admin)</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Derniers documents ajoutés -->
+            <div id="recent-section" class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xl font-bold text-[#0D3B1E] flex items-center gap-2">
+                        <i data-lucide="clock" class="w-5 h-5 text-[#2E7D32]"></i>
+                        <span>Dernières publications pédagogiques</span>
+                    </h3>
+                </div>
+                <div id="recent-documents-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+            </div>
+
+            <!-- Encart Charte & Droits d'accès -->
+            <div class="bg-white rounded-2xl p-6 border border-emerald-200/80 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div class="flex items-start gap-4">
+                    <div class="p-3 rounded-xl bg-emerald-100 text-[#1B5E20] shrink-0">
+                        <i data-lucide="shield" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-[#0D3B1E] text-base">Espace ouvert aux élèves et enseignants — Administration sécurisée</h4>
+                        <p class="text-sm text-gray-600 mt-1">
+                            Tous les visiteurs peuvent consulter en ligne et télécharger librement les fiches, cours et sujets. L'hébergement, la modification et la suppression des documents sont réservés à l'administrateur (<strong>Prof. SALMI AHMED</strong>).
+                        </p>
+                    </div>
+                </div>
+                <button id="home-admin-cta" onclick="openLoginModal()" class="bg-green-gradient-btn text-white px-5 py-2.5 rounded-xl font-semibold text-sm shrink-0 cursor-pointer flex items-center gap-2">
+                    <i data-lucide="lock" class="w-4 h-4"></i>
+                    <span>Accès Administrateur</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- ==================== VUE 2 : EXPLORATEUR DE NIVEAU (1AM - 4AM) ==================== -->
+        <section id="view-level" class="hidden fade-in space-y-6">
+            <!-- En-tête du niveau -->
+            <div class="bg-green-gradient-hero rounded-2xl p-6 sm:p-8 text-white shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <div class="flex items-center gap-2 text-emerald-200 text-xs font-bold uppercase tracking-wider mb-1">
+                        <span>Cycle Moyen</span>
+                        <span>•</span>
+                        <span>Prof. SALMI AHMED</span>
+                    </div>
+                    <h2 id="level-title" class="text-2xl sm:text-3xl font-extrabold">1<sup>ère</sup> Année Moyenne (1AM)</h2>
+                    <p id="level-subtitle" class="text-sm text-emerald-100 mt-1">Fiches pédagogiques, résumés de cours et sujets d'évaluation classés par séquence.</p>
+                </div>
+                <button id="level-admin-add-btn" onclick="openLevelAdminHub(currentLevel)" class="hidden bg-amber-400 text-emerald-950 hover:bg-amber-300 px-4 py-2.5 rounded-xl font-extrabold text-sm shadow flex items-center gap-2 self-start md:self-auto cursor-pointer transition">
+                    <i data-lucide="folder-cog" class="w-4 h-4"></i>
+                    <span>Espace Hébergement <span id="btn-add-level-label">1AM</span></span>
+                </button>
+            </div>
+
+            <!-- Filtres par Rubrique (Onglets) -->
+            <div class="bg-white p-2 rounded-2xl shadow-sm border border-emerald-100 flex flex-wrap gap-2" id="category-tabs">
+                <button onclick="setCategoryFilter('all')" data-cat="all" class="cat-tab px-4 py-2.5 rounded-xl text-sm font-semibold transition cursor-pointer bg-[#1B5E20] text-white">
+                    Tous les documents
+                </button>
+                <button onclick="setCategoryFilter('cours')" data-cat="cours" class="cat-tab px-4 py-2.5 rounded-xl text-sm font-semibold transition cursor-pointer text-gray-700 hover:bg-emerald-50 flex items-center gap-1.5">
+                    <i data-lucide="book-open" class="w-4 h-4"></i> Cours & Résumés
+                </button>
+                <button onclick="setCategoryFilter('fiches')" data-cat="fiches" class="cat-tab px-4 py-2.5 rounded-xl text-sm font-semibold transition cursor-pointer text-gray-700 hover:bg-emerald-50 flex items-center gap-1.5">
+                    <i data-lucide="file-spreadsheet" class="w-4 h-4"></i> Fiches pédagogiques
+                </button>
+                <button onclick="setCategoryFilter('devoirs')" data-cat="devoirs" class="cat-tab px-4 py-2.5 rounded-xl text-sm font-semibold transition cursor-pointer text-gray-700 hover:bg-emerald-50 flex items-center gap-1.5">
+                    <i data-lucide="file-text" class="w-4 h-4"></i> Devoirs & Corrigés
+                </button>
+                <button onclick="setCategoryFilter('compositions')" data-cat="compositions" class="cat-tab px-4 py-2.5 rounded-xl text-sm font-semibold transition cursor-pointer text-gray-700 hover:bg-emerald-50 flex items-center gap-1.5">
+                    <i data-lucide="file-check-2" class="w-4 h-4"></i> Compositions & Corrigés
+                </button>
+                <button id="tab-bem" onclick="setCategoryFilter('bem')" data-cat="bem" class="hidden cat-tab px-4 py-2.5 rounded-xl text-sm font-semibold transition cursor-pointer text-amber-800 bg-amber-50 hover:bg-amber-100 flex items-center gap-1.5">
+                    <i data-lucide="award" class="w-4 h-4 text-amber-600"></i> Spécial BEM
+                </button>
+            </div>
+
+            <!-- Barre de recherche et filtre de séquence par niveau -->
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-emerald-100 shadow-xs">
+                <div class="relative w-full sm:w-80">
+                    <i data-lucide="search" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i>
+                    <input type="text" id="level-search-input" oninput="renderLevelDocuments()" placeholder="Filtrer dans ce niveau..." 
+                        class="w-full pl-10 pr-4 py-2 rounded-xl bg-gray-50 border border-gray-200 focus:border-[#2E7D32] focus:bg-white focus:outline-none text-xs transition">
+                </div>
+
+                <div id="sequence-filter-pills" class="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0">
+                    <!-- Boutons de filtre par séquence générés dynamiquement -->
+                </div>
+            </div>
+
+            <!-- Liste des documents du niveau -->
+            <div id="level-documents-container" class="space-y-6">
+                <!-- Rendu dynamique -->
+            </div>
+        </section>
+    </main>
+
+    <!-- ==================== PIED DE PAGE ==================== -->
+    <footer class="bg-[#0D3B1E] text-white mt-16 border-t border-emerald-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-emerald-800 flex items-center justify-center text-white">
+                    <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-sm">Le Français au CEM — Prof. SALMI AHMED</h3>
+                    <p class="text-xs text-emerald-300">Plateforme éducative dédiée au cycle moyen (Algérie)</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-4 text-xs">
+                <button onclick="navigateTo('accueil')" class="hover:text-emerald-300 transition cursor-pointer">Accueil</button>
+                <span>•</span>
+                <button onclick="navigateTo('1AM')" class="hover:text-emerald-300 transition cursor-pointer">1AM</button>
+                <button onclick="navigateTo('2AM')" class="hover:text-emerald-300 transition cursor-pointer">2AM</button>
+                <button onclick="navigateTo('3AM')" class="hover:text-emerald-300 transition cursor-pointer">3AM</button>
+                <button onclick="navigateTo('4AM')" class="hover:text-emerald-300 transition cursor-pointer">4AM</button>
+                <span>•</span>
+                <button id="footer-admin-btn" onclick="openLoginModal()" class="text-amber-300 hover:underline font-bold cursor-pointer">Espace Admin</button>
+            </div>
+        </div>
+        <div class="bg-[#092B15] py-4 text-center text-[11px] text-emerald-400/80 border-t border-emerald-900/50">
+            © 2026 Prof. SALMI AHMED. Tous droits réservés. Conçu pour l'excellence pédagogique en Français CEM.
+        </div>
+    </footer>
+
+    <!-- ==================== MODALE 1 : LECTURE / APERÇU DOCUMENT ==================== -->
+    <div id="preview-modal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-3 sm:p-5">
+        <div class="bg-white rounded-3xl max-w-4xl w-full shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
+            <!-- En-tête de la modale -->
+            <div class="bg-green-gradient-nav p-5 text-white flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div id="modal-doc-icon" class="p-2.5 rounded-2xl bg-white/15 text-white">
+                        <i data-lucide="file-text" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span id="modal-doc-format" class="px-2 py-0.5 rounded bg-amber-400 text-emerald-950 text-[10px] font-extrabold uppercase">PDF</span>
+                            <span id="modal-doc-badge" class="text-xs text-emerald-200 font-semibold">1AM • S01</span>
+                        </div>
+                        <h3 id="modal-doc-filename" class="font-extrabold text-base sm:text-lg mt-0.5 truncate max-w-md">Titre du document</h3>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="modal-admin-edit-btn" onclick="closePreviewModal(); openEditDocumentModal(activePreviewDoc.id)" class="hidden px-3 py-1.5 rounded-xl bg-amber-400 text-emerald-950 font-bold text-xs hover:bg-amber-300 transition cursor-pointer flex items-center gap-1">
+                        <i data-lucide="pencil" class="w-3.5 h-3.5"></i> Modifier
+                    </button>
+                    <button onclick="closePreviewModal()" class="p-2 rounded-xl bg-white/15 hover:bg-white/25 text-white cursor-pointer">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Corps de l'aperçu -->
+            <div class="p-5 sm:p-6 overflow-y-auto space-y-5 flex-grow bg-gray-50/50">
+                <div class="flex items-center justify-between text-xs text-gray-500 bg-white p-3.5 rounded-2xl border border-gray-200 shadow-xs">
+                    <span id="modal-doc-meta">Rubrique : Cours & Résumés</span>
+                    <span id="modal-doc-source-badge" class="font-bold text-[#1B5E20] bg-emerald-50 px-2.5 py-1 rounded-lg">Fiche numérique</span>
+                </div>
+
+                <!-- Lecteur PDF Intégré si fichier local hébergé -->
+                <div id="modal-pdf-viewer-container" class="hidden rounded-2xl overflow-hidden border border-gray-200 bg-white shadow-sm h-96">
+                    <iframe id="modal-pdf-iframe" class="w-full h-full" title="Aperçu PDF"></iframe>
+                </div>
+
+                <!-- Résumé / Contenu pédagogique -->
+                <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-xs space-y-2">
+                    <h4 class="text-xs font-extrabold uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
+                        <i data-lucide="info" class="w-4 h-4 text-[#2E7D32]"></i>
+                        <span>Résumé Pédagogique / Objectif de la Séance</span>
+                    </h4>
+                    <p id="modal-doc-summary" class="text-sm text-gray-700 leading-relaxed font-normal">
+                        Description du cours...
+                    </p>
+                </div>
+            </div>
+
+            <!-- Pied de la modale -->
+            <div class="px-6 py-4 bg-white border-t border-gray-100 flex items-center justify-between">
+                <span class="text-xs text-gray-400">Prof. SALMI AHMED — Cycle Moyen</span>
+                <div class="flex items-center gap-2">
+                    <button onclick="closePreviewModal()" class="px-4 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold cursor-pointer">Fermer</button>
+                    <button onclick="downloadDirect(activePreviewDoc.id)" class="bg-green-gradient-btn text-white px-5 py-2.5 rounded-xl text-xs font-bold shadow flex items-center gap-2 cursor-pointer">
+                        <i data-lucide="download" class="w-4 h-4"></i>
+                        <span>Télécharger le document</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODALE 2 : HÉBERGER / MODIFIER UN DOCUMENT (ADMIN) ==================== -->
+    <div id="teacher-modal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-3 sm:p-5">
+        <div class="bg-white rounded-3xl max-w-2xl w-full shadow-2xl overflow-hidden flex flex-col max-h-[94vh]">
+            <div class="bg-green-gradient-nav p-5 text-white flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="p-2.5 rounded-2xl bg-amber-400 text-emerald-950">
+                        <i data-lucide="folder-cog" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 id="teacher-modal-title" class="font-extrabold text-lg">Héberger un document</h3>
+                        <p class="text-xs text-emerald-200">Espace Administrateur — Prof. SALMI AHMED</p>
+                    </div>
+                </div>
+                <button onclick="closeTeacherModal()" class="p-2 rounded-xl bg-white/15 hover:bg-white/25 text-white cursor-pointer">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <form id="add-doc-form" onsubmit="handleSaveDocument(event)" class="p-5 sm:p-6 overflow-y-auto space-y-4 flex-grow text-xs sm:text-sm">
+                <input type="hidden" id="edit-doc-id">
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-bold text-gray-700 mb-1">Niveau scolaire *</label>
+                        <select id="form-level" onchange="updateLivePreview()" class="w-full p-2.5 rounded-xl border border-gray-300 focus:border-[#2E7D32] focus:outline-none bg-white">
+                            <option value="1AM">1ère Année Moyenne (1AM)</option>
+                            <option value="2AM">2ème Année Moyenne (2AM)</option>
+                            <option value="3AM">3ème Année Moyenne (3AM)</option>
+                            <option value="4AM">4ème Année Moyenne (4AM - BEM)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-gray-700 mb-1">Rubrique *</label>
+                        <select id="form-category" onchange="updateFormFields()" class="w-full p-2.5 rounded-xl border border-gray-300 focus:border-[#2E7D32] focus:outline-none bg-white">
+                            <option value="fiches">Fiches pédagogiques</option>
+                            <option value="cours">Cours & Résumés</option>
+                            <option value="devoirs">Devoirs & Corrigés</option>
+                            <option value="compositions">Compositions & Corrigés</option>
+                            <option value="bem">Spécial BEM (4AM)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Champs dynamiques selon la rubrique (Séquence / Trimestre) -->
+                <div id="fields-sequence-mode" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-bold text-gray-700 mb-1">Séquence *</label>
+                        <select id="form-sequence" onchange="updateLivePreview()" class="w-full p-2.5 rounded-xl border border-gray-300 focus:border-[#2E7D32] focus:outline-none bg-white">
+                            <option value="S01">Séquence 01</option>
+                            <option value="S02">Séquence 02</option>
+                            <option value="S03">Séquence 03</option>
+                            <option value="S04">Séquence 04</option>
+                            <option value="S05">Séquence 05</option>
+                            <option value="S06">Séquence 06</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-gray-700 mb-1">Domaine / Activité *</label>
+                        <select id="form-domain" onchange="updateLivePreview()" class="w-full p-2.5 rounded-xl border border-gray-300 focus:border-[#2E7D32] focus:outline-none bg-white">
+                            <option value="Grammaire">Grammaire</option>
+                            <option value="Conjugaison">Conjugaison</option>
+                            <option value="Orthographe">Orthographe</option>
+                            <option value="Vocabulaire">Vocabulaire</option>
+                            <option value="Compréhension de l'écrit">Compréhension de l'écrit</option>
+                            <option value="Production écrite">Production écrite</option>
+                            <option value="Lecture et entraînement">Lecture et entraînement</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Champs examens (Devoirs / Compositions / BEM) -->
+                <div id="fields-exam-mode" class="hidden grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div>
+                        <label class="block font-bold text-gray-700 mb-1">Trimestre *</label>
+                        <select id="form-trimester" onchange="updateLivePreview()" class="w-full p-2.5 rounded-xl border border-gray-300 focus:border-[#2E7D32] focus:outline-none bg-white">
+                            <option value="T1">1er Trimestre (T1)</option>
+                            <option value="T2">2ème Trimestre (T2)</option>
+                            <option value="T3">3ème Trimestre (T3)</option>
+                            <option value="BEM">Année BEM</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-gray-700 mb-1">Type d'évaluation *</label>
+                        <select id="form-exam-type" onchange="updateLivePreview()" class="w-full p-2.5 rounded-xl border border-gray-300 focus:border-[#2E7D32] focus:outline-none bg-white">
+                            <option value="Devoir 1">Devoir 1</option>
+                            <option value="Devoir 2">Devoir 2</option>
+                            <option value="Composition 1">Composition 1</option>
+                            <option value="Composition 2">Composition 2</option>
+                            <option value="Composition 3">Composition 3</option>
+                            <option value="BEM Blanc">BEM Blanc</option>
+                            <option value="Annales BEM">Annales BEM</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-gray-700 mb-1">Contenu (Sujet/Corrigé) *</label>
+                        <select id="form-exam-content" onchange="updateLivePreview()" class="w-full p-2.5 rounded-xl border border-gray-300 focus:border-[#2E7D32] focus:outline-none bg-white">
+                            <option value="Sujet">Sujet</option>
+                            <option value="Corrigé">Corrigé</option>
+                            <option value="Sujet + Corrigé">Sujet + Corrigé</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div class="sm:col-span-2">
+                        <label id="label-title-theme" class="block font-bold text-gray-700 mb-1">Titre de la leçon / Thème (Orthographe soignée) *</label>
+                        <input type="text" id="form-title" oninput="updateLivePreview()" placeholder="Ex: La phrase déclarative" required
+                            class="w-full p-2.5 rounded-xl border border-gray-300 focus:border-[#2E7D32] focus:outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-gray-700 mb-1">Format *</label>
+                        <select id="form-ext" onchange="updateLivePreview()" class="w-full p-2.5 rounded-xl border border-gray-300 focus:border-[#2E7D32] focus:outline-none bg-white">
+                            <option value="pdf">PDF</option>
+                            <option value="docx">Word (.docx)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Aperçu en direct du nom normalisé -->
+                <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200">
+                    <span class="block text-[11px] font-extrabold text-emerald-900 uppercase tracking-wider mb-0.5">Nom normalisé généré :</span>
+                    <code id="live-filename-preview" class="text-xs font-mono text-[#1B5E20] font-bold break-all">1AM - S01 - Grammaire - La phrase déclarative.pdf</code>
+                </div>
+
+                <!-- Hébergement du fichier (Optionnel) -->
+                <div class="p-4 rounded-2xl bg-gray-50 border border-gray-200 space-y-3">
+                    <h4 class="font-bold text-gray-800 flex items-center gap-1.5">
+                        <i data-lucide="cloud-upload" class="w-4 h-4 text-[#2E7D32]"></i>
+                        <span>Fichier du document (PDF ou DOCX)</span>
+                    </h4>
+
+                    <!-- Option A : Importer un fichier depuis l'appareil -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div id="dropzone-local-file" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleFileDrop(event)" class="p-3 rounded-xl bg-white border-2 border-dashed border-emerald-300 hover:border-[#1B5E20] transition">
+                            <label class="block font-bold text-[#1B5E20] text-xs mb-1.5 flex items-center gap-1.5">
+                                <i data-lucide="file-up" class="w-4 h-4"></i> Option A : Glisser ou choisir un fichier (PDF / DOCX)
+                            </label>
+                            <input type="file" id="form-local-file" accept=".pdf,.doc,.docx" onchange="handleLocalFileSelect(this)"
+                                class="w-full text-xs text-gray-600 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-emerald-100 file:text-[#1B5E20] hover:file:bg-emerald-200 cursor-pointer">
+                            <p id="local-file-status" class="text-[11px] text-gray-500 mt-1">Stockage persistant haute capacité (IndexedDB) + lecteur PDF intégré.</p>
+                        </div>
+
+                        <!-- Option B : Lien Google Drive -->
+                        <div class="p-3 rounded-xl bg-white border border-gray-200">
+                            <label class="block font-bold text-gray-700 text-xs mb-1.5 flex items-center gap-1.5">
+                                <i data-lucide="link" class="w-4 h-4 text-[#2E7D32]"></i> Option B : Lien Google Drive
+                            </label>
+                            <input type="url" id="form-drive-url" placeholder="https://drive.google.com/file/d/..."
+                                class="w-full p-2 rounded-lg border border-gray-300 focus:border-[#2E7D32] focus:outline-none text-xs">
+                            <p class="text-[11px] text-gray-500 mt-1">Ou collez directement votre lien de partage Drive.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-bold text-gray-700 mb-1">Résumé pédagogique / Contenu visible dans l'aperçu</label>
+                    <textarea id="form-summary" rows="2" placeholder="Ex: Objectif de la séance, règle essentielle ou présentation du sujet d'examen."
+                        class="w-full p-2.5 rounded-xl border border-gray-300 focus:border-[#2E7D32] focus:outline-none"></textarea>
+                </div>
+
+                <div class="pt-2 flex items-center justify-end gap-3 border-t border-gray-100">
+                    <button type="button" onclick="closeTeacherModal()" class="px-4 py-2.5 rounded-xl text-gray-600 hover:bg-gray-100 font-semibold cursor-pointer">Annuler</button>
+                    <button type="submit" class="bg-green-gradient-btn text-white px-6 py-2.5 rounded-xl font-bold shadow cursor-pointer flex items-center gap-2">
+                        <i data-lucide="check" class="w-4 h-4"></i>
+                        <span id="teacher-submit-btn-text">Publier et classer le document</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== MODALE 2B : FENÊTRE ADMIN PAR NIVEAU AVEC SOUS-CASES ==================== -->
+    <div id="level-admin-hub-modal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-3 sm:p-5">
+        <div class="bg-[#F4FAF5] rounded-3xl max-w-6xl w-full shadow-2xl overflow-hidden flex flex-col max-h-[94vh] border border-emerald-200">
+            <!-- En-tête de la fenêtre Admin du Niveau -->
+            <div class="bg-green-gradient-nav p-5 sm:px-7 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <div class="p-2.5 rounded-2xl bg-amber-400 text-emerald-950 shadow-sm">
+                        <i data-lucide="folder-cog" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="px-2 py-0.5 rounded bg-amber-400/20 border border-amber-300/40 text-amber-200 text-[10px] font-extrabold uppercase tracking-wider">Espace Administrateur Privé</span>
+                            <span class="text-xs text-emerald-200">Prof. SALMI AHMED</span>
+                        </div>
+                        <h3 id="hub-modal-title" class="font-extrabold text-lg sm:text-xl mt-0.5">Espace d'hébergement — 1AM</h3>
+                    </div>
+                </div>
+
+                <!-- Sélecteur rapide de niveau dans la fenêtre Admin -->
+                <div class="flex items-center gap-2">
+                    <div class="flex bg-white/10 p-1 rounded-xl border border-white/15">
+                        <button onclick="openLevelAdminHub('1AM')" data-hub-lvl="1AM" class="hub-lvl-btn px-3 py-1.5 rounded-lg text-xs font-extrabold transition cursor-pointer">1AM</button>
+                        <button onclick="openLevelAdminHub('2AM')" data-hub-lvl="2AM" class="hub-lvl-btn px-3 py-1.5 rounded-lg text-xs font-extrabold transition cursor-pointer">2AM</button>
+                        <button onclick="openLevelAdminHub('3AM')" data-hub-lvl="3AM" class="hub-lvl-btn px-3 py-1.5 rounded-lg text-xs font-extrabold transition cursor-pointer">3AM</button>
+                        <button onclick="openLevelAdminHub('4AM')" data-hub-lvl="4AM" class="hub-lvl-btn px-3 py-1.5 rounded-lg text-xs font-extrabold transition cursor-pointer">4AM</button>
+                    </div>
+                    <button onclick="closeLevelAdminHub()" class="p-2 rounded-xl bg-white/15 hover:bg-white/25 text-white cursor-pointer" title="Fermer">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Corps : Grille des Sous-Cases d'hébergement -->
+            <div class="p-4 sm:p-6 overflow-y-auto space-y-5 flex-grow">
+                <div class="bg-white p-3.5 rounded-2xl border border-emerald-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-gray-600">
+                    <p class="flex items-center gap-2">
+                        <i data-lucide="info" class="w-4 h-4 text-[#2E7D32] shrink-0"></i>
+                        <span>Cliquez sur <strong>« + Héberger dans cette sous-case »</strong> pour pré-remplir automatiquement le niveau, la rubrique et la nomenclature officielle.</span>
+                    </p>
+                    <span id="hub-total-badge" class="px-3 py-1 rounded-full bg-emerald-100 text-[#1B5E20] font-bold shrink-0">0 document(s) en 1AM</span>
+                </div>
+
+                <!-- Grille dynamique des sous-cases -->
+                <div id="hub-subboxes-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Sous-cases générées dynamiquement -->
+                </div>
+            </div>
+
+            <!-- Pied de la fenêtre Admin -->
+            <div class="px-6 py-3.5 bg-white border-t border-emerald-100 flex items-center justify-between text-xs">
+                <button onclick="closeLevelAdminHub(); navigateTo(currentHubLevel);" class="text-[#1B5E20] font-bold hover:underline flex items-center gap-1.5 cursor-pointer">
+                    <i data-lucide="eye" class="w-4 h-4"></i> Voir le rendu public côté visiteur (<span id="hub-preview-lvl-label">1AM</span>)
+                </button>
+                <button onclick="closeLevelAdminHub()" class="px-4 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold cursor-pointer">Fermer l'espace Admin</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODALE 3 : CONNEXION ADMINISTRATEUR ==================== -->
+    <div id="login-modal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full shadow-2xl overflow-hidden">
+            <div class="bg-green-gradient-hero p-6 text-white text-center relative">
+                <button onclick="closeLoginModal()" class="absolute top-4 right-4 p-2 rounded-xl bg-white/15 hover:bg-white/25 text-white cursor-pointer">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+                <div class="w-12 h-12 rounded-2xl bg-amber-400 text-emerald-950 flex items-center justify-center mx-auto mb-3 shadow-md">
+                    <i data-lucide="lock" class="w-6 h-6"></i>
+                </div>
+                <h3 class="font-extrabold text-xl">Administration Sécurisée</h3>
+                <p class="text-xs text-emerald-100 mt-1">Réservé au Prof. SALMI AHMED</p>
+            </div>
+
+            <form onsubmit="handleLoginSubmit(event)" class="p-6 space-y-4">
+                <div>
+                    <label class="block font-bold text-gray-700 text-xs mb-1">Mot de passe administrateur</label>
+                    <div class="relative">
+                        <i data-lucide="key" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i>
+                        <input type="password" id="login-password-input" placeholder="Entrez le mot de passe (défaut: salmi2026)" required
+                            class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:border-[#2E7D32] focus:outline-none text-sm">
+                    </div>
+                    <p class="text-[11px] text-gray-500 mt-1.5">Par défaut : <code class="bg-gray-100 px-1.5 py-0.5 rounded font-bold text-gray-700">salmi2026</code> (modifiable dans les paramètres)</p>
+                </div>
+
+                <div id="login-error-msg" class="hidden text-xs text-red-600 font-semibold bg-red-50 p-3 rounded-xl border border-red-200">
+                    Mot de passe incorrect. Veuillez réessayer.
+                </div>
+
+                <div class="pt-2 flex items-center justify-end gap-3">
+                    <button type="button" onclick="closeLoginModal()" class="px-4 py-2.5 rounded-xl text-gray-600 hover:bg-gray-100 text-xs font-semibold cursor-pointer">Annuler</button>
+                    <button type="submit" class="bg-green-gradient-btn text-white px-6 py-2.5 rounded-xl text-xs font-bold shadow cursor-pointer">
+                        Se connecter
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== MODALE 4 : PARAMÈTRES ADMIN & SAUVEGARDE ==================== -->
+    <div id="admin-settings-modal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full shadow-2xl overflow-hidden">
+            <div class="bg-green-gradient-hero p-5 text-white flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="p-2.5 rounded-2xl bg-amber-400 text-emerald-950">
+                        <i data-lucide="settings" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-base">Paramètres Administrateur</h3>
+                        <p class="text-xs text-emerald-200">Sécurité et gestion de la base de données</p>
+                    </div>
+                </div>
+                <button onclick="closeAdminSettingsModal()" class="p-2 rounded-xl bg-white/15 hover:bg-white/25 text-white cursor-pointer">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="p-6 space-y-6 text-xs sm:text-sm">
+                <!-- Changement de mot de passe -->
+                <div class="space-y-2">
+                    <h4 class="font-bold text-gray-800 flex items-center gap-1.5">
+                        <i data-lucide="key" class="w-4 h-4 text-[#2E7D32]"></i> Modifier le mot de passe Admin
+                    </h4>
+                    <div class="flex gap-2">
+                        <input type="password" id="new-admin-pwd" placeholder="Nouveau mot de passe"
+                            class="flex-grow p-2.5 rounded-xl border border-gray-300 focus:border-[#2E7D32] focus:outline-none">
+                        <button onclick="changeAdminPassword()" class="bg-[#1B5E20] hover:bg-[#0D3B1E] text-white px-4 py-2.5 rounded-xl font-bold cursor-pointer">Enregistrer</button>
+                    </div>
+                </div>
+
+                <hr class="border-gray-100">
+
+                <!-- Export / Import Base de Données -->
+                <div class="space-y-3">
+                    <h4 class="font-bold text-gray-800 flex items-center gap-1.5">
+                        <i data-lucide="database" class="w-4 h-4 text-[#2E7D32]"></i> Sauvegarde et Restauration
+                    </h4>
+                    <p class="text-xs text-gray-500 leading-relaxed">
+                        Exportez toutes vos données et documents sous forme de fichier JSON pour les sauvegarder en lieu sûr ou les restaurer sur un autre appareil.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="exportDatabaseJSON()" class="bg-emerald-100 hover:bg-emerald-200 text-[#1B5E20] px-4 py-2.5 rounded-xl font-bold flex items-center gap-1.5 cursor-pointer">
+                            <i data-lucide="download" class="w-4 h-4"></i> Exporter la sauvegarde (.json)
+                        </button>
+                        <label class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-xl font-bold flex items-center gap-1.5 cursor-pointer">
+                            <i data-lucide="upload" class="w-4 h-4"></i> Restaurer
+                            <input type="file" accept=".json" onchange="importDatabaseJSON(this)" class="hidden">
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-6 py-4 bg-gray-50 border-t border-gray-100 flex justify-end">
+                <button onclick="closeAdminSettingsModal()" class="px-5 py-2.5 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold cursor-pointer">Fermer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODALE 5 : CONFIRMATION SUPPRESSION ==================== -->
+    <div id="delete-confirm-modal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full shadow-2xl p-6 text-center space-y-4">
+            <div class="w-14 h-14 rounded-full bg-red-100 text-red-600 flex items-center justify-center mx-auto">
+                <i data-lucide="trash-2" class="w-7 h-7"></i>
+            </div>
+            <h3 class="font-extrabold text-lg text-gray-900">Confirmer la suppression</h3>
+            <p class="text-xs text-gray-600">
+                Êtes-vous sûr de vouloir supprimer définitivement le document <strong id="delete-doc-name" class="text-gray-900"></strong> de votre site ?
+            </p>
+            <div class="flex items-center justify-center gap-3 pt-2">
+                <button onclick="closeDeleteModal()" class="px-5 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold text-xs cursor-pointer">Annuler</button>
+                <button onclick="confirmDeleteDocument()" class="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs shadow cursor-pointer">Supprimer définitivement</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== SCRIPT JAVASCRIPT ==================== -->
+    <script>
+        // Base de données initiale respectant strictement la nomenclature validée (sans projet, orthographe française soignée)
+        const INITIAL_DOCUMENTS = [
+            // 1AM
+            {
+                id: 'doc-1',
+                level: '1AM',
+                category: 'fiches',
+                subType: 'fiches',
+                sequence: 'S01',
+                domain: 'Grammaire',
+                title: 'La phrase déclarative',
+                ext: 'pdf',
+                filename: '1AM - S01 - Grammaire - La phrase déclarative.pdf',
+                driveUrl: '',
+                summary: 'Objectif : Identifier et produire des phrases déclaratives pour donner une information dans un texte explicatif. Déroulement complet de la séance (Éveil de l\'intérêt, Phase d\'observation, Structuration, Application).',
+                date: '2026-10-05'
+            },
+            {
+                id: 'doc-2',
+                level: '1AM',
+                category: 'cours',
+                subType: 'cours',
+                sequence: 'S01',
+                domain: 'Conjugaison',
+                title: 'Les verbes du 1er groupe au présent de l\'indicatif',
+                ext: 'pdf',
+                filename: '1AM - S01 - Conjugaison - Les verbes du 1er groupe au présent de l\'indicatif.pdf',
+                driveUrl: '',
+                summary: 'Règle essentielle : Au présent de l\'indicatif, tous les verbes du 1er groupe (en -er, sauf aller) prennent les terminaisons : -e, -es, -e, -ons, -ez, -ent. Attention aux verbes en -cer et -ger.',
+                date: '2026-10-08'
+            },
+            {
+                id: 'doc-3',
+                level: '1AM',
+                category: 'devoirs',
+                subType: 'devoir-sujet',
+                sequence: 'T1',
+                trimester: 'T1',
+                examType: 'Devoir 1',
+                examContent: 'Sujet',
+                title: 'L\'alimentation',
+                ext: 'pdf',
+                filename: '1AM - T1 - Devoir 1 - L\'alimentation (Sujet).pdf',
+                driveUrl: '',
+                summary: 'Texte support : L\'importance des fruits et légumes pour la santé. Questions de compréhension de l\'écrit (6 pts), fonctionnement de la langue (7 pts) et production écrite sur l\'hygiène alimentaire (7 pts).',
+                date: '2026-11-02'
+            },
+            {
+                id: 'doc-3b',
+                level: '1AM',
+                category: 'devoirs',
+                subType: 'devoir-corrige',
+                sequence: 'T1',
+                trimester: 'T1',
+                examType: 'Devoir 1',
+                examContent: 'Corrigé',
+                title: 'L\'alimentation',
+                ext: 'pdf',
+                filename: '1AM - T1 - Devoir 1 - L\'alimentation (Corrigé).pdf',
+                driveUrl: '',
+                summary: 'Corrigé type et barème détaillé du Devoir 1 du 1er trimestre portant sur l\'alimentation saine.',
+                date: '2026-11-03'
+            },
+            // 2AM
+            {
+                id: 'doc-4',
+                level: '2AM',
+                category: 'fiches',
+                subType: 'fiches',
+                sequence: 'S03',
+                domain: 'Conjugaison',
+                title: 'Le passé simple',
+                ext: 'docx',
+                filename: '2AM - S03 - Conjugaison - Le passé simple.docx',
+                driveUrl: '',
+                summary: 'Fiche pédagogique modifiable (.docx) — Prof. SALMI AHMED. Objectif : Conjuguer correctement les verbes des 1er, 2e et 3e groupes au passé simple dans le cadre d\'un récit.',
+                date: '2026-10-14'
+            },
+            {
+                id: 'doc-5',
+                level: '2AM',
+                category: 'cours',
+                subType: 'cours',
+                sequence: 'S01',
+                domain: 'Vocabulaire',
+                title: 'Les formules d\'ouverture et de clôture du conte',
+                ext: 'pdf',
+                filename: '2AM - S01 - Vocabulaire - Les formules d\'ouverture et de clôture du conte.pdf',
+                driveUrl: '',
+                summary: 'Boîte à outils pour rédiger le début et la fin d\'un conte merveilleux : « Il était une fois... », « Jadis, dans un royaume lointain... » et « Depuis ce jour, ils vécurent heureux... ».',
+                date: '2026-10-18'
+            },
+            // 3AM
+            {
+                id: 'doc-6',
+                level: '3AM',
+                category: 'cours',
+                subType: 'cours',
+                sequence: 'S02',
+                domain: 'Grammaire',
+                title: 'Les connecteurs chronologiques',
+                ext: 'pdf',
+                filename: '3AM - S02 - Grammaire - Les connecteurs chronologiques.pdf',
+                driveUrl: '',
+                summary: 'Fiche de synthèse élève : Classer et employer les indicateurs de temps (d\'abord, ensuite, puis, soudain, enfin, en 1954...) pour assurer la cohérence d\'un récit historique.',
+                date: '2026-10-22'
+            },
+            {
+                id: 'doc-7',
+                level: '3AM',
+                category: 'compositions',
+                subType: 'compo-sujet',
+                sequence: 'T2',
+                trimester: 'T2',
+                examType: 'Composition 2',
+                examContent: 'Sujet',
+                title: 'Le personnage historique',
+                ext: 'pdf',
+                filename: '3AM - T2 - Composition 2 - Le personnage historique (Sujet).pdf',
+                driveUrl: '',
+                summary: 'Sujet complet : Rédiger la biographie d\'une figure emblématique du patrimoine algérien en employant le présent de narration et les substituts lexicaux.',
+                date: '2026-11-05'
+            },
+            {
+                id: 'doc-7b',
+                level: '3AM',
+                category: 'compositions',
+                subType: 'compo-corrige',
+                sequence: 'T2',
+                trimester: 'T2',
+                examType: 'Composition 2',
+                examContent: 'Corrigé',
+                title: 'Le personnage historique',
+                ext: 'pdf',
+                filename: '3AM - T2 - Composition 2 - Le personnage historique (Corrigé).pdf',
+                driveUrl: '',
+                summary: 'Corrigé type et grille d\'évaluation de la Composition 2 du 2ème trimestre.',
+                date: '2026-11-06'
+            },
+            // 4AM
+            {
+                id: 'doc-8',
+                level: '4AM',
+                category: 'cours',
+                subType: 'cours',
+                sequence: 'S01',
+                domain: 'Conjugaison',
+                title: 'Les valeurs du présent de l\'indicatif',
+                ext: 'pdf',
+                filename: '4AM - S01 - Conjugaison - Les valeurs du présent de l\'indicatif.pdf',
+                driveUrl: '',
+                summary: 'Distinction claire entre le présent d\'énonciation, le présent de vérité générale (fréquent dans les textes argumentatifs), le présent de narration et le présent d\'habitude.',
+                date: '2026-10-25'
+            },
+            {
+                id: 'doc-9',
+                level: '4AM',
+                category: 'fiches',
+                subType: 'fiches',
+                sequence: 'S02',
+                domain: 'Production écrite',
+                title: 'Rédiger un texte argumentatif',
+                ext: 'pdf',
+                filename: '4AM - S02 - Production écrite - Rédiger un texte argumentatif.pdf',
+                driveUrl: '',
+                summary: 'Préparation complète (1er et 2e jets) : Amener l\'élève à formuler une thèse claire, l\'étayer par deux ou trois arguments introduits par des connecteurs logiques et appuyés par des exemples précis.',
+                date: '2026-10-28'
+            },
+            {
+                id: 'doc-10',
+                level: '4AM',
+                category: 'cours',
+                subType: 'cours',
+                sequence: 'S03',
+                domain: 'Production écrite',
+                title: 'Boîte à outils (Le patrimoine)',
+                ext: 'pdf',
+                filename: '4AM - S03 - Production écrite - Boîte à outils (Le patrimoine).pdf',
+                driveUrl: '',
+                summary: 'Lexique thématique complet (noms, adjectifs mélioratifs, verbes d\'action) et arguments prêts à l\'emploi pour défendre et valoriser le patrimoine culturel et artisanal algérien.',
+                date: '2026-11-08'
+            },
+            {
+                id: 'doc-11',
+                level: '4AM',
+                category: 'bem',
+                subType: 'bem-sujet',
+                sequence: 'BEM',
+                trimester: 'BEM',
+                examType: 'BEM Blanc',
+                examContent: 'Sujet',
+                title: 'L\'environnement',
+                ext: 'pdf',
+                filename: '4AM - BEM Blanc - L\'environnement (Sujet).pdf',
+                driveUrl: '',
+                summary: 'Sujet type Brevet d\'Enseignement Moyen (BEM) : Texte argumentatif sur la protection de la biodiversité. Compréhension (13 pts) + Situation d\'intégration (7 pts).',
+                date: '2026-11-12'
+            },
+            {
+                id: 'doc-11b',
+                level: '4AM',
+                category: 'bem',
+                subType: 'bem-corrige',
+                sequence: 'BEM',
+                trimester: 'BEM',
+                examType: 'BEM Blanc',
+                examContent: 'Corrigé',
+                title: 'L\'environnement',
+                ext: 'pdf',
+                filename: '4AM - BEM Blanc - L\'environnement (Corrigé).pdf',
+                driveUrl: '',
+                summary: 'Corrigé type et grille d\'évaluation critériée du BEM Blanc sur l\'environnement.',
+                date: '2026-11-13'
+            }
+        ];
+
+        // Définition des sous-cases de l'espace Admin pour chaque niveau
+        const ADMIN_SUBBOXES = [
+            {
+                key: 'fiches',
+                label: '1. Fiches pédagogiques',
+                desc: 'Préparations par séquence (S01 à S06) et activité',
+                icon: 'file-spreadsheet',
+                badgeColor: 'bg-emerald-100 text-[#1B5E20]',
+                defaultCat: 'fiches',
+                defaultExamType: '',
+                defaultContent: ''
+            },
+            {
+                key: 'cours',
+                label: '2. Cours & Résumés',
+                desc: 'Leçons de langue et boîtes à outils élèves (S01 à S06)',
+                icon: 'book-open',
+                badgeColor: 'bg-teal-100 text-teal-900',
+                defaultCat: 'cours',
+                defaultExamType: '',
+                defaultContent: ''
+            },
+            {
+                key: 'devoir-sujet',
+                label: '3. Devoirs (Sujets)',
+                desc: 'Énoncés des devoirs surveillés (T1, T2, T3)',
+                icon: 'file-text',
+                badgeColor: 'bg-sky-100 text-sky-900',
+                defaultCat: 'devoirs',
+                defaultExamType: 'Devoir 1',
+                defaultContent: 'Sujet'
+            },
+            {
+                key: 'devoir-corrige',
+                label: '4. Corrigés des devoirs',
+                desc: 'Corrections types et barèmes des devoirs (T1, T2, T3)',
+                icon: 'check-circle-2',
+                badgeColor: 'bg-lime-100 text-lime-900',
+                defaultCat: 'devoirs',
+                defaultExamType: 'Devoir 1',
+                defaultContent: 'Corrigé'
+            },
+            {
+                key: 'compo-sujet',
+                label: '5. Compositions (Sujets)',
+                desc: 'Sujets des compositions trimestrielles (T1, T2, T3)',
+                icon: 'file-check-2',
+                badgeColor: 'bg-indigo-100 text-indigo-900',
+                defaultCat: 'compositions',
+                defaultExamType: 'Composition 1',
+                defaultContent: 'Sujet'
+            },
+            {
+                key: 'compo-corrige',
+                label: '6. Corrigés des compositions',
+                desc: 'Corrections détaillées des compositions (T1, T2, T3)',
+                icon: 'clipboard-check',
+                badgeColor: 'bg-purple-100 text-purple-900',
+                defaultCat: 'compositions',
+                defaultExamType: 'Composition 1',
+                defaultContent: 'Corrigé'
+            }
+        ];
+
+        const ADMIN_BEM_SUBBOXES = [
+            {
+                key: 'bem-sujet',
+                label: '7. Spécial BEM — Sujets & Annales',
+                desc: 'Sujets officiels BEM, BEM Blancs et sujets de révision',
+                icon: 'award',
+                badgeColor: 'bg-amber-100 text-amber-900',
+                defaultCat: 'bem',
+                defaultExamType: 'Annales BEM',
+                defaultContent: 'Sujet'
+            },
+            {
+                key: 'bem-corrige',
+                label: '8. Spécial BEM — Corrigés & Grilles',
+                desc: 'Corrigés types et grilles d\'évaluation du BEM',
+                icon: 'award',
+                badgeColor: 'bg-orange-100 text-orange-900',
+                defaultCat: 'bem',
+                defaultExamType: 'Annales BEM',
+                defaultContent: 'Corrigé'
+            }
+        ];
+
+        // État de l'application
+        let documents = [];
+        let fileBlobsMap = {}; // Stocke en mémoire et IndexedDB les fichiers réels (PDF/DOCX)
+        let isAdmin = false;
+        let currentView = 'accueil';
+        let currentLevel = '1AM';
+        let currentHubLevel = '1AM';
+        let currentCategory = 'all';
+        let currentSequence = 'all';
+        let activePreviewDoc = null;
+        let pendingLocalFileData = null;
+        let docIdToDelete = null;
+        let dbInstance = null;
+
+        // ==================== STOCKAGE PERSISTANT HAUTE CAPACITÉ (INDEXEDDB) ====================
+        function initIndexedDB() {
+            return new Promise((resolve) => {
+                if (!window.indexedDB) {
+                    resolve(null);
+                    return;
+                }
+                const request = indexedDB.open('CEM_Francais_Salmi_DB', 1);
+                request.onupgradeneeded = function (e) {
+                    const db = e.target.result;
+                    if (!db.objectStoreNames.contains('files')) {
+                        db.createObjectStore('files', { keyPath: 'id' });
+                    }
+                };
+                request.onsuccess = function (e) {
+                    dbInstance = e.target.result;
+                    loadAllFileBlobsFromDB().then(() => resolve(dbInstance));
+                };
+                request.onerror = function () {
+                    resolve(null);
+                };
+            });
+        }
+
+        function saveFileBlobToDB(id, dataUrl) {
+            fileBlobsMap[id] = dataUrl;
+            if (!dbInstance) return;
+            try {
+                const tx = dbInstance.transaction(['files'], 'readwrite');
+                tx.objectStore('files').put({ id, dataUrl });
+            } catch (e) {
+                console.warn('Erreur sauvegarde IndexedDB', e);
+            }
+        }
+
+        function deleteFileBlobFromDB(id) {
+            delete fileBlobsMap[id];
+            if (!dbInstance) return;
+            try {
+                const tx = dbInstance.transaction(['files'], 'readwrite');
+                tx.objectStore('files').delete(id);
+            } catch (e) {
+                console.warn('Erreur suppression IndexedDB', e);
+            }
+        }
+
+        function loadAllFileBlobsFromDB() {
+            return new Promise((resolve) => {
+                if (!dbInstance) {
+                    resolve();
+                    return;
+                }
+                try {
+                    const tx = dbInstance.transaction(['files'], 'readonly');
+                    const req = tx.objectStore('files').getAll();
+                    req.onsuccess = function () {
+                        (req.result || []).forEach(item => {
+                            fileBlobsMap[item.id] = item.dataUrl;
+                        });
+                        resolve();
+                    };
+                    req.onerror = () => resolve();
+                } catch (e) {
+                    resolve();
+                }
+            });
+        }
+
+        function loadDocuments() {
+            const saved = localStorage.getItem('cem_francais_docs');
+            if (saved) {
+                try {
+                    documents = JSON.parse(saved);
+                } catch (e) {
+                    documents = [...INITIAL_DOCUMENTS];
+                }
+            } else {
+                documents = [...INITIAL_DOCUMENTS];
+                saveDocuments();
+            }
+        }
+
+        function saveDocuments() {
+            localStorage.setItem('cem_francais_docs', JSON.stringify(documents));
+            updateCounts();
+        }
+
+        // Initialisation au chargement de la page
+        window.onload = async function () {
+            await initIndexedDB();
+            loadDocuments();
+            checkAdminSession();
+            lucide.createIcons();
+            updateCounts();
+            renderRecentDocuments();
+            updateLivePreview();
+        };
+
+        // ==================== GESTION RÔLES VISITEUR / ADMIN ====================
+        function getAdminPassword() {
+            return localStorage.getItem('cem_francais_admin_pwd') || 'salmi2026';
+        }
+
+        function checkAdminSession() {
+            isAdmin = sessionStorage.getItem('cem_francais_is_admin') === 'true';
+            updateRoleUI();
+        }
+
+        function updateRoleUI() {
+            const adminHeader = document.getElementById('admin-controls-header');
+            const mobileLoginBtn = document.getElementById('mobile-login-btn');
+            const mobileAdminBtns = document.getElementById('mobile-admin-btns');
+            const levelAddBtn = document.getElementById('level-admin-add-btn');
+            const homeAdminCta = document.getElementById('home-admin-cta');
+            const footerAdminBtn = document.getElementById('footer-admin-btn');
+            const cardAdminBtns = document.querySelectorAll('.admin-only-card-btn');
+
+            if (isAdmin) {
+                adminHeader.classList.remove('hidden');
+                adminHeader.classList.add('flex');
+                mobileLoginBtn.classList.add('hidden');
+                mobileAdminBtns.classList.remove('hidden');
+                levelAddBtn.classList.remove('hidden');
+                cardAdminBtns.forEach(btn => btn.classList.remove('hidden'));
+
+                homeAdminCta.innerHTML = '<i data-lucide="folder-cog" class="w-4 h-4"></i><span>Ouvrir l\'Espace Hébergement Admin</span>';
+                homeAdminCta.onclick = () => openLevelAdminHub('1AM');
+
+                footerAdminBtn.textContent = 'Paramètres Admin';
+                footerAdminBtn.onclick = openAdminSettingsModal;
+            } else {
+                adminHeader.classList.add('hidden');
+                adminHeader.classList.remove('flex');
+                mobileLoginBtn.classList.remove('hidden');
+                mobileAdminBtns.classList.add('hidden');
+                levelAddBtn.classList.add('hidden');
+                cardAdminBtns.forEach(btn => btn.classList.add('hidden'));
+
+                homeAdminCta.innerHTML = '<i data-lucide="lock" class="w-4 h-4"></i><span>Accès Administrateur</span>';
+                homeAdminCta.onclick = openLoginModal;
+
+                footerAdminBtn.textContent = 'Espace Admin';
+                footerAdminBtn.onclick = openLoginModal;
+            }
+
+            if (currentView === 'accueil') {
+                renderRecentDocuments();
+                const q = document.getElementById('global-search-input').value;
+                if (q.trim()) handleGlobalSearch(q);
+            } else if (currentView === 'level') {
+                renderLevelDocuments();
+            }
+            lucide.createIcons();
+        }
+
+        function openLoginModal() {
+            document.getElementById('login-modal').classList.remove('hidden');
+            document.getElementById('login-password-input').value = '';
+            document.getElementById('login-error-msg').classList.add('hidden');
+            setTimeout(() => document.getElementById('login-password-input').focus(), 100);
+        }
+
+        function closeLoginModal() {
+            document.getElementById('login-modal').classList.add('hidden');
+        }
+
+        function handleLoginSubmit(e) {
+            e.preventDefault();
+            const pwd = document.getElementById('login-password-input').value;
+            if (pwd === getAdminPassword()) {
+                isAdmin = true;
+                sessionStorage.setItem('cem_francais_is_admin', 'true');
+                closeLoginModal();
+                updateRoleUI();
+                showToast('Connexion administrateur réussie ! Bienvenue, Prof. Salmi.');
+            } else {
+                document.getElementById('login-error-msg').classList.remove('hidden');
+            }
+        }
+
+        function logoutAdmin() {
+            isAdmin = false;
+            sessionStorage.removeItem('cem_francais_is_admin');
+            updateRoleUI();
+            showToast('Déconnexion administrateur effectuée.');
+        }
+
+        // ==================== NAVIGATION ENTRE VUES ====================
+        function navigateTo(viewOrLevel) {
+            const accueilSec = document.getElementById('view-accueil');
+            const levelSec = document.getElementById('view-level');
+
+            if (viewOrLevel === 'accueil') {
+                currentView = 'accueil';
+                accueilSec.classList.remove('hidden');
+                levelSec.classList.add('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                renderRecentDocuments();
+            } else {
+                currentView = 'level';
+                currentLevel = viewOrLevel;
+                currentCategory = 'all';
+                currentSequence = 'all';
+                accueilSec.classList.add('hidden');
+                levelSec.classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                setupLevelHeader();
+                renderSequenceFilterPills();
+                renderLevelDocuments();
+            }
+            lucide.createIcons();
+        }
+
+        function scrollToRecent() {
+            document.getElementById('recent-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function setupLevelHeader() {
+            const titles = {
+                '1AM': '1ère Année Moyenne (1AM)',
+                '2AM': '2ème Année Moyenne (2AM)',
+                '3AM': '3ème Année Moyenne (3AM)',
+                '4AM': '4ème Année Moyenne (4AM - BEM)'
+            };
+            const subtitles = {
+                '1AM': 'Fiches pédagogiques, cours de grammaire/conjugaison et devoirs pour la 1ère AM.',
+                '2AM': 'Ressources pour l\'étude du conte, de la fable et l\'apprentissage du passé simple.',
+                '3AM': 'Fiches, faits divers, récits historiques et biographies pour la 3ème AM.',
+                '4AM': 'Espace BEM : Textes argumentatifs, boîtes à outils et annales du brevet corrigées.'
+            };
+
+            document.getElementById('level-title').innerHTML = titles[currentLevel];
+            document.getElementById('level-subtitle').textContent = subtitles[currentLevel];
+            document.getElementById('btn-add-level-label').textContent = currentLevel;
+
+            const bemTab = document.getElementById('tab-bem');
+            if (currentLevel === '4AM') {
+                bemTab.classList.remove('hidden');
+            } else {
+                bemTab.classList.add('hidden');
+            }
+
+            // Réinitialiser les onglets visuels
+            document.querySelectorAll('.cat-tab').forEach(btn => {
+                btn.className = 'cat-tab px-4 py-2.5 rounded-xl text-sm font-semibold transition cursor-pointer text-gray-700 hover:bg-emerald-50';
+            });
+            const defaultTab = document.querySelector('[data-cat="all"]');
+            defaultTab.className = 'cat-tab px-4 py-2.5 rounded-xl text-sm font-semibold transition cursor-pointer bg-[#1B5E20] text-white';
+        }
+
+        function updateCounts() {
+            let total = documents.length;
+            document.getElementById('total-docs-badge').textContent = total;
+
+            ['1AM', '2AM', '3AM', '4AM'].forEach(lvl => {
+                const count = documents.filter(d => d.level === lvl).length;
+                const el = document.getElementById(`count-${lvl}`);
+                if (el) el.textContent = `${count} document(s)`;
+            });
+        }
+
+        // ==================== RENDU DES DERNIERS DOCS & RECHERCHE ====================
+        function renderRecentDocuments() {
+            const grid = document.getElementById('recent-documents-grid');
+            const sorted = [...documents].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 6);
+
+            if (sorted.length === 0) {
+                grid.innerHTML = '<p class="text-xs text-gray-500 italic col-span-full py-4">Aucun document pour le moment.</p>';
+                return;
+            }
+
+            grid.innerHTML = sorted.map(doc => createDocumentCardHTML(doc)).join('');
+            lucide.createIcons();
+        }
+
+        function handleGlobalSearch(query) {
+            const q = query.trim().toLowerCase();
+            const grid = document.getElementById('recent-documents-grid');
+            if (!q) {
+                renderRecentDocuments();
+                return;
+            }
+
+            const filtered = documents.filter(d => 
+                d.title.toLowerCase().includes(q) || 
+                d.filename.toLowerCase().includes(q) || 
+                d.summary.toLowerCase().includes(q) ||
+                d.level.toLowerCase().includes(q)
+            );
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '<p class="text-xs text-gray-500 italic col-span-full py-4">Aucun document ne correspond à votre recherche.</p>';
+                return;
+            }
+
+            grid.innerHTML = filtered.map(doc => createDocumentCardHTML(doc)).join('');
+            lucide.createIcons();
+        }
+
+        // ==================== RENDU EXPLORATEUR DE NIVEAU ====================
+        function setCategoryFilter(cat) {
+            currentCategory = cat;
+            currentSequence = 'all';
+
+            document.querySelectorAll('.cat-tab').forEach(btn => {
+                if (btn.getAttribute('data-cat') === cat) {
+                    btn.className = 'cat-tab px-4 py-2.5 rounded-xl text-sm font-semibold transition cursor-pointer bg-[#1B5E20] text-white';
+                } else {
+                    btn.className = 'cat-tab px-4 py-2.5 rounded-xl text-sm font-semibold transition cursor-pointer text-gray-700 hover:bg-emerald-50';
+                }
+            });
+
+            renderSequenceFilterPills();
+            renderLevelDocuments();
+        }
+
+        function renderSequenceFilterPills() {
+            const container = document.getElementById('sequence-filter-pills');
+            let seqs = ['all'];
+            if (currentCategory === 'bem') {
+                seqs = ['all', 'BEM'];
+            } else if (currentCategory === 'devoirs' || currentCategory === 'compositions') {
+                seqs = ['all', 'T1', 'T2', 'T3'];
+            } else {
+                seqs = ['all', 'S01', 'S02', 'S03', 'S04', 'S05', 'S06'];
+            }
+
+            container.innerHTML = seqs.map(s => {
+                const active = currentSequence === s;
+                const label = s === 'all' ? 'Toutes les séquences' : (s.startsWith('S') ? `Séquence ${s.replace('S', '')}` : s);
+                return `
+                    <button onclick="setSequenceFilter('${s}')" class="px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer shrink-0 ${active ? 'bg-[#2E7D32] text-white shadow-xs' : 'bg-gray-100 hover:bg-emerald-50 text-gray-700'}">
+                        ${label}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function setSequenceFilter(seq) {
+            currentSequence = seq;
+            renderSequenceFilterPills();
+            renderLevelDocuments();
+        }
+
+        function renderLevelDocuments() {
+            const container = document.getElementById('level-documents-container');
+            const searchInputVal = (document.getElementById('level-search-input').value || '').trim().toLowerCase();
+
+            let list = documents.filter(d => d.level === currentLevel);
+
+            if (currentCategory !== 'all') {
+                list = list.filter(d => d.category === currentCategory);
+            }
+
+            if (currentSequence !== 'all') {
+                list = list.filter(d => d.sequence === currentSequence || d.trimester === currentSequence);
+            }
+
+            if (searchInputVal) {
+                list = list.filter(d => d.title.toLowerCase().includes(searchInputVal) || d.filename.toLowerCase().includes(searchInputVal) || d.summary.toLowerCase().includes(searchInputVal));
+            }
+
+            if (list.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-white rounded-2xl p-10 text-center border border-emerald-100 shadow-sm space-y-3">
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-[#1B5E20] flex items-center justify-center mx-auto">
+                            <i data-lucide="folder-open" class="w-6 h-6"></i>
+                        </div>
+                        <h4 class="font-bold text-gray-800 text-base">Aucun document trouvé dans cette section</h4>
+                        <p class="text-xs text-gray-500 max-w-md mx-auto">
+                            ${isAdmin ? 'Vous pouvez ajouter un document instantanément en cliquant sur "Espace Hébergement" ci-dessus ou dans votre panneau admin par niveau.' : 'Aucun contenu n\'a encore été publié dans cette catégorie pour ce niveau.'}
+                        </p>
+                        ${isAdmin ? `<button onclick="openLevelAdminHub('${currentLevel}')" class="mt-2 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-amber-400 text-emerald-950 font-bold text-xs shadow hover:bg-amber-300 cursor-pointer"><i data-lucide="plus-circle" class="w-4 h-4"></i> Ajouter un document en ${currentLevel}</button>` : ''}
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                    ${list.map(doc => createDocumentCardHTML(doc)).join('')}
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        function createDocumentCardHTML(doc) {
+            const isPdf = doc.ext === 'pdf';
+            const iconName = isPdf ? 'file-text' : 'file-spreadsheet';
+            const badgeBg = doc.category === 'bem' ? 'bg-amber-100 text-amber-900 border-amber-300' : 'bg-emerald-100 text-emerald-900 border-emerald-200';
+
+            return `
+                <div class="bg-white rounded-2xl p-5 border border-emerald-100 shadow-sm hover:shadow-md transition flex flex-col justify-between group">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-1 rounded-lg text-[11px] font-extrabold uppercase border ${badgeBg}">
+                                ${doc.level} • ${doc.sequence || doc.trimester || 'Général'}
+                            </span>
+                            <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">${doc.ext}</span>
+                        </div>
+
+                        <div>
+                            <h4 class="font-bold text-[#0D3B1E] text-sm group-hover:text-[#2E7D32] transition line-clamp-2">${doc.title}</h4>
+                            <code class="text-[11px] text-gray-500 font-mono block mt-1 truncate">${doc.filename}</code>
+                        </div>
+
+                        <p class="text-xs text-gray-600 line-clamp-2 leading-relaxed">${doc.summary || 'Aucun résumé fourni.'}</p>
+                    </div>
+
+                    <div class="mt-5 pt-3 border-t border-gray-100 flex items-center justify-between gap-2">
+                        <button onclick="openPreviewModal('${doc.id}')" class="flex-grow bg-emerald-50 hover:bg-emerald-100 text-[#1B5E20] py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer">
+                            <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                            <span>Lire / Aperçu</span>
+                        </button>
+                        <button onclick="downloadDirect('${doc.id}')" class="p-2 rounded-xl bg-gray-100 hover:bg-emerald-600 hover:text-white text-gray-700 transition cursor-pointer" title="Télécharger">
+                            <i data-lucide="download" class="w-4 h-4"></i>
+                        </button>
+                        ${isAdmin ? `
+                            <button onclick="openEditDocumentModal('${doc.id}')" class="p-2 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 transition cursor-pointer" title="Modifier">
+                                <i data-lucide="pencil" class="w-4 h-4"></i>
+                            </button>
+                            <button onclick="promptDeleteDocument('${doc.id}')" class="p-2 rounded-xl bg-red-50 hover:bg-red-100 text-red-600 transition cursor-pointer" title="Supprimer">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        // ==================== APERÇU ET LECTURE (MODALE 1) ====================
+        function openPreviewModal(docId) {
+            const doc = documents.find(d => d.id === docId);
+            if (!doc) return;
+            activePreviewDoc = doc;
+
+            document.getElementById('modal-doc-filename').textContent = doc.filename;
+            document.getElementById('modal-doc-badge').textContent = `${doc.level} • ${doc.sequence || doc.trimester || 'Général'}`;
+            document.getElementById('modal-doc-format').textContent = doc.ext.toUpperCase();
+            document.getElementById('modal-doc-meta').textContent = `Rubrique : ${getCategoryLabel(doc.category)} | Domaine : ${doc.domain || doc.examType || 'Pédagogique'}`;
+            document.getElementById('modal-doc-summary').textContent = doc.summary || 'Aucun résumé disponible pour ce document.';
+
+            const pdfContainer = document.getElementById('modal-pdf-viewer-container');
+            const pdfIframe = document.getElementById('modal-pdf-iframe');
+            const editBtn = document.getElementById('modal-admin-edit-btn');
+
+            if (isAdmin) {
+                editBtn.classList.remove('hidden');
+            } else {
+                editBtn.classList.add('hidden');
+            }
+
+            const storedBlob = fileBlobsMap[doc.id];
+            if (storedBlob && doc.ext === 'pdf') {
+                pdfContainer.classList.remove('hidden');
+                pdfIframe.src = storedBlob;
+            } else if (doc.driveUrl && doc.ext === 'pdf' && doc.driveUrl.includes('drive.google.com')) {
+                // Tenter d'afficher via embed drive si lien valide
+                pdfContainer.classList.remove('hidden');
+                let embedUrl = doc.driveUrl.replace('/view?usp=sharing', '/preview').replace('/edit?usp=sharing', '/preview');
+                pdfIframe.src = embedUrl;
+            } else {
+                pdfContainer.classList.add('hidden');
+                pdfIframe.src = '';
+            }
+
+            document.getElementById('preview-modal').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closePreviewModal() {
+            document.getElementById('preview-modal').classList.add('hidden');
+            document.getElementById('modal-pdf-iframe').src = '';
+            activePreviewDoc = null;
+        }
+
+        function getCategoryLabel(cat) {
+            const map = {
+                'fiches': 'Fiches pédagogiques',
+                'cours': 'Cours & Résumés',
+                'devoirs': 'Devoirs & Corrigés',
+                'compositions': 'Compositions & Corrigés',
+                'bem': 'Spécial BEM'
+            };
+            return map[cat] || cat;
+        }
+
+        function downloadDirect(docId) {
+            const doc = documents.find(d => d.id === docId);
+            if (!doc) return;
+
+            const storedBlob = fileBlobsMap[doc.id];
+            if (storedBlob) {
+                const a = document.createElement('a');
+                a.href = storedBlob;
+                a.download = doc.filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                showToast(`Téléchargement de "${doc.filename}" lancé.`);
+            } else if (doc.driveUrl) {
+                window.open(doc.driveUrl, '_blank');
+                showToast(`Ouverture du lien Google Drive...`);
+            } else {
+                // Fiche virtuelle / texte
+                const content = `LE FRANÇAIS AU CEM — PROF. SALMI AHMED\n----------------------------------------\nTitre : ${doc.title}\nFichier : ${doc.filename}\nNiveau : ${doc.level}\nRésumé : ${doc.summary}\n\n[Document pédagogique officiel - Prof. Salmi Ahmed]`;
+                const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = doc.filename.replace(/\.(pdf|docx)$/i, '.txt');
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                showToast(`Fiche texte "${doc.filename}" téléchargée.`);
+            }
+        }
+
+        // ==================== FENÊTRE ADMIN PAR NIVEAU (SOUS-CASES) ====================
+        function openLevelAdminHub(level) {
+            currentHubLevel = level;
+            document.getElementById('hub-modal-title').textContent = `Espace d'hébergement — ${level}`;
+            document.getElementById('hub-preview-lvl-label').textContent = level;
+
+            document.querySelectorAll('.hub-lvl-btn').forEach(btn => {
+                if (btn.getAttribute('data-hub-lvl') === level) {
+                    btn.className = 'hub-lvl-btn px-3 py-1.5 rounded-lg text-xs font-extrabold transition cursor-pointer bg-amber-400 text-emerald-950 shadow-xs';
+                } else {
+                    btn.className = 'hub-lvl-btn px-3 py-1.5 rounded-lg text-xs font-extrabold transition cursor-pointer text-white hover:bg-white/10';
+                }
+            });
+
+            renderHubSubboxes();
+            document.getElementById('level-admin-hub-modal').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeLevelAdminHub() {
+            document.getElementById('level-admin-hub-modal').classList.add('hidden');
+        }
+
+        function renderHubSubboxes() {
+            const grid = document.getElementById('hub-subboxes-grid');
+            const levelDocs = documents.filter(d => d.level === currentHubLevel);
+            document.getElementById('hub-total-badge').textContent = `${levelDocs.length} document(s) en ${currentHubLevel}`;
+
+            let allBoxes = [...ADMIN_SUBBOXES];
+            if (currentHubLevel === '4AM') {
+                allBoxes = [...allBoxes, ...ADMIN_BEM_SUBBOXES];
+            }
+
+            grid.innerHTML = allBoxes.map(box => {
+                let boxDocs = [];
+                if (box.defaultCat === 'bem') {
+                    boxDocs = levelDocs.filter(d => d.category === 'bem' && d.examContent === box.defaultContent);
+                } else if (box.defaultCat === 'devoirs' || box.defaultCat === 'compositions') {
+                    boxDocs = levelDocs.filter(d => d.category === box.defaultCat && d.examContent === box.defaultContent);
+                } else {
+                    boxDocs = levelDocs.filter(d => d.category === box.defaultCat);
+                }
+
+                return `
+                    <div class="bg-white rounded-2xl p-5 border border-emerald-100 shadow-xs flex flex-col justify-between space-y-4">
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="px-2.5 py-1 rounded-lg text-xs font-extrabold ${box.badgeColor}">
+                                    ${boxDocs.length} fichier(s)
+                                </span>
+                                <div class="p-2 rounded-xl bg-emerald-50 text-[#1B5E20]">
+                                    <i data-lucide="${box.icon}" class="w-4 h-4"></i>
+                                </div>
+                            </div>
+                            <h4 class="font-bold text-gray-900 text-sm">${box.label}</h4>
+                            <p class="text-xs text-gray-500 leading-relaxed">${box.desc}</p>
+                        </div>
+
+                        <div class="space-y-2 pt-2 border-t border-gray-100">
+                            <button onclick="openTeacherModalPreFilled('${currentHubLevel}', '${box.defaultCat}', '${box.defaultExamType}', '${box.defaultContent}')" class="w-full bg-green-gradient-btn text-white py-2 px-3 rounded-xl text-xs font-bold shadow-xs hover:shadow flex items-center justify-center gap-1.5 transition cursor-pointer">
+                                <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i>
+                                <span>+ Héberger dans cette sous-case</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        // ==================== FORMULAIRE HÉBERGEMENT / MODIFICATION (MODALE 2) ====================
+        function openTeacherModal() {
+            closeLevelAdminHub();
+            document.getElementById('teacher-modal-title').textContent = 'Héberger un document';
+            document.getElementById('teacher-submit-btn-text').textContent = 'Publier et classer le document';
+            document.getElementById('edit-doc-id').value = '';
+            document.getElementById('form-level').value = currentHubLevel || currentLevel || '1AM';
+            document.getElementById('form-category').value = 'fiches';
+            document.getElementById('form-title').value = '';
+            document.getElementById('form-summary').value = '';
+            document.getElementById('form-drive-url').value = '';
+            document.getElementById('form-local-file').value = '';
+            pendingLocalFileData = null;
+            document.getElementById('local-file-status').textContent = 'Stockage persistant haute capacité (IndexedDB) + lecteur PDF intégré.';
+
+            updateFormFields();
+            document.getElementById('teacher-modal').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function openTeacherModalPreFilled(level, category, examType, examContent) {
+            closeLevelAdminHub();
+            openTeacherModal();
+            document.getElementById('form-level').value = level;
+            document.getElementById('form-category').value = category;
+            updateFormFields();
+
+            if (examType && document.getElementById('form-exam-type')) {
+                document.getElementById('form-exam-type').value = examType;
+            }
+            if (examContent && document.getElementById('form-exam-content')) {
+                document.getElementById('form-exam-content').value = examContent;
+            }
+            updateLivePreview();
+        }
+
+        function openEditDocumentModal(docId) {
+            const doc = documents.find(d => d.id === docId);
+            if (!doc) return;
+
+            document.getElementById('teacher-modal-title').textContent = 'Modifier le document';
+            document.getElementById('teacher-submit-btn-text').textContent = 'Mettre à jour le document';
+            document.getElementById('edit-doc-id').value = doc.id;
+            document.getElementById('form-level').value = doc.level;
+            document.getElementById('form-category').value = doc.category;
+            document.getElementById('form-title').value = doc.title;
+            document.getElementById('form-summary').value = doc.summary || '';
+            document.getElementById('form-drive-url').value = doc.driveUrl || '';
+            document.getElementById('form-ext').value = doc.ext;
+            document.getElementById('form-local-file').value = '';
+            pendingLocalFileData = fileBlobsMap[doc.id] || null;
+
+            updateFormFields();
+
+            if (doc.sequence) {
+                const seqSel = document.getElementById('form-sequence');
+                if (seqSel) seqSel.value = doc.sequence;
+            }
+            if (doc.domain) {
+                const domSel = document.getElementById('form-domain');
+                if (domSel) domSel.value = doc.domain;
+            }
+            if (doc.trimester) {
+                const triSel = document.getElementById('form-trimester');
+                if (triSel) triSel.value = doc.trimester;
+            }
+            if (doc.examType) {
+                const exTypeSel = document.getElementById('form-exam-type');
+                if (exTypeSel) exTypeSel.value = doc.examType;
+            }
+            if (doc.examContent) {
+                const exContSel = document.getElementById('form-exam-content');
+                if (exContSel) exContSel.value = doc.examContent;
+            }
+
+            if (pendingLocalFileData) {
+                document.getElementById('local-file-status').textContent = 'Fichier local actuel enregistré en mémoire.';
+            } else {
+                document.getElementById('local-file-status').textContent = 'Aucun fichier local joint.';
+            }
+
+            updateLivePreview();
+            document.getElementById('teacher-modal').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeTeacherModal() {
+            document.getElementById('teacher-modal').classList.add('hidden');
+            pendingLocalFileData = null;
+        }
+
+        function updateFormFields() {
+            const cat = document.getElementById('form-category').value;
+            const seqMode = document.getElementById('fields-sequence-mode');
+            const examMode = document.getElementById('fields-exam-mode');
+
+            if (cat === 'fiches' || cat === 'cours') {
+                seqMode.classList.remove('hidden');
+                examMode.classList.add('hidden');
+            } else {
+                seqMode.classList.add('hidden');
+                examMode.classList.remove('hidden');
+            }
+            updateLivePreview();
+        }
+
+        function handleLocalFileSelect(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                pendingLocalFileData = e.target.result;
+                const ext = file.name.split('.').pop().toLowerCase();
+                if (ext === 'pdf' || ext === 'docx' || ext === 'doc') {
+                    document.getElementById('form-ext').value = ext === 'pdf' ? 'pdf' : 'docx';
+                }
+                document.getElementById('local-file-status').textContent = `Fichier prêt : "${file.name}"`;
+                updateLivePreview();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('border-[#1B5E20]', 'bg-emerald-50/50');
+        }
+
+        function handleDragLeave(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('border-[#1B5E20]', 'bg-emerald-50/50');
+        }
+
+        function handleFileDrop(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('border-[#1B5E20]', 'bg-emerald-50/50');
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                document.getElementById('form-local-file').files = e.dataTransfer.files;
+                handleLocalFileSelect(document.getElementById('form-local-file'));
+            }
+        }
+
+        function generateOfficialFilename() {
+            const level = document.getElementById('form-level').value;
+            const cat = document.getElementById('form-category').value;
+            const title = (document.getElementById('form-title').value || 'Lecon').trim();
+            const ext = document.getElementById('form-ext').value;
+
+            if (cat === 'fiches' || cat === 'cours') {
+                const seq = document.getElementById('form-sequence').value;
+                const domain = document.getElementById('form-domain').value;
+                return `${level} - ${seq} - ${domain} - ${title}.${ext}`;
+            } else {
+                const tri = document.getElementById('form-trimester').value;
+                const examType = document.getElementById('form-exam-type').value;
+                const examContent = document.getElementById('form-exam-content').value;
+                return `${level} - ${tri} - ${examType} - ${title} (${examContent}).${ext}`;
+            }
+        }
+
+        function updateLivePreview() {
+            const filename = generateOfficialFilename();
+            document.getElementById('live-filename-preview').textContent = filename;
+        }
+
+        function handleSaveDocument(e) {
+            e.preventDefault();
+            const editId = document.getElementById('edit-doc-id').value;
+            const level = document.getElementById('form-level').value;
+            const category = document.getElementById('form-category').value;
+            const title = document.getElementById('form-title').value.trim();
+            const ext = document.getElementById('form-ext').value;
+            const summary = document.getElementById('form-summary').value.trim();
+            const driveUrl = document.getElementById('form-drive-url').value.trim();
+            const filename = generateOfficialFilename();
+
+            let sequence = '';
+            let domain = '';
+            let trimester = '';
+            let examType = '';
+            let examContent = '';
+            let subType = category;
+
+            if (category === 'fiches' || category === 'cours') {
+                sequence = document.getElementById('form-sequence').value;
+                domain = document.getElementById('form-domain').value;
+                subType = category;
+            } else {
+                trimester = document.getElementById('form-trimester').value;
+                examType = document.getElementById('form-exam-type').value;
+                examContent = document.getElementById('form-exam-content').value;
+                sequence = trimester;
+                subType = `${category}-${examContent.toLowerCase()}`;
+            }
+
+            const docId = editId || `doc-${Date.now()}`;
+
+            if (pendingLocalFileData) {
+                saveFileBlobToDB(docId, pendingLocalFileData);
+            }
+
+            const docData = {
+                id: docId,
+                level,
+                category,
+                subType,
+                sequence,
+                domain,
+                trimester,
+                examType,
+                examContent,
+                title,
+                ext,
+                filename,
+                driveUrl,
+                summary,
+                date: new Date().toISOString().split('T')[0]
+            };
+
+            if (editId) {
+                const idx = documents.findIndex(d => d.id === editId);
+                if (idx !== -1) {
+                    documents[idx] = docData;
+                }
+                showToast(`Document "${filename}" mis à jour avec succès.`);
+            } else {
+                documents.unshift(docData);
+                showToast(`Document "${filename}" publié et classé avec succès.`);
+            }
+
+            saveDocuments();
+            closeTeacherModal();
+
+            if (currentView === 'accueil') {
+                renderRecentDocuments();
+            } else if (currentView === 'level') {
+                renderLevelDocuments();
+            }
+        }
+
+        // ==================== SUPPRESSION DE DOCUMENT ====================
+        function promptDeleteDocument(docId) {
+            const doc = documents.find(d => d.id === docId);
+            if (!doc) return;
+            docIdToDelete = docId;
+            document.getElementById('delete-doc-name').textContent = doc.filename;
+            document.getElementById('delete-confirm-modal').classList.remove('hidden');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('delete-confirm-modal').classList.add('hidden');
+            docIdToDelete = null;
+        }
+
+        function confirmDeleteDocument() {
+            if (!docIdToDelete) return;
+            documents = documents.filter(d => d.id !== docIdToDelete);
+            deleteFileBlobFromDB(docIdToDelete);
+            saveDocuments();
+            closeDeleteModal();
+            showToast('Document supprimé définitivement.');
+
+            if (currentView === 'accueil') {
+                renderRecentDocuments();
+            } else if (currentView === 'level') {
+                renderLevelDocuments();
+            }
+        }
+
+        // ==================== PARAMÈTRES ADMIN & SAUVEGARDE (JSON) ====================
+        function openAdminSettingsModal() {
+            document.getElementById('new-admin-pwd').value = '';
+            document.getElementById('admin-settings-modal').classList.remove('hidden');
+        }
+
+        function closeAdminSettingsModal() {
+            document.getElementById('admin-settings-modal').classList.add('hidden');
+        }
+
+        function changeAdminPassword() {
+            const pwd = document.getElementById('new-admin-pwd').value.trim();
+            if (!pwd) {
+                showToast('Veuillez entrer un mot de passe valide.');
+                return;
+            }
+            localStorage.setItem('cem_francais_admin_pwd', pwd);
+            showToast('Mot de passe administrateur mis à jour.');
+            closeAdminSettingsModal();
+        }
+
+        function exportDatabaseJSON() {
+            const dataToExport = {
+                documents,
+                exportDate: new Date().toISOString(),
+                admin: 'Prof. SALMI AHMED'
+            };
+            const blob = new Blob([JSON.stringify(dataToExport, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `CEM_Francais_Backup_${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('Sauvegarde JSON exportée avec succès.');
+        }
+
+        function importDatabaseJSON(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                try {
+                    const parsed = JSON.parse(e.target.result);
+                    if (parsed && Array.isArray(parsed.documents)) {
+                        documents = parsed.documents;
+                        saveDocuments();
+                        showToast('Base de données restaurée avec succès.');
+                        closeAdminSettingsModal();
+                        if (currentView === 'accueil') {
+                            renderRecentDocuments();
+                        } else if (currentView === 'level') {
+                            renderLevelDocuments();
+                        }
+                    } else {
+                        showToast('Format de fichier de sauvegarde invalide.');
+                    }
+                } catch (err) {
+                    showToast('Erreur lors de la lecture du fichier JSON.');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // ==================== TOAST NOTIFICATION ====================
+        function showToast(message) {
+            const toast = document.getElementById('toast-notification');
+            const msgEl = document.getElementById('toast-message');
+            msgEl.textContent = message;
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+                toast.classList.remove('translate-y-0', 'opacity-100');
+            }, 3500);
+        }
+    </script>
+</body>
+</html>
